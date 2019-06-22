@@ -209,7 +209,7 @@ func (r *SCTPTransport) OnDataChannel(f func(*DataChannel)) {
 	r.onDataChannelHandler = f
 }
 
-// OnDataChannelOpen sets an event handler which is invoked when a data
+// OnDataChannelOpened sets an event handler which is invoked when a data
 // channel is opened
 func (r *SCTPTransport) OnDataChannelOpened(f func(*DataChannel)) {
 	r.lock.Lock()

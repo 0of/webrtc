@@ -105,11 +105,11 @@ func (src *statsReportCollector) Collecting() {
 	src.collectingGroup.Add(1)
 }
 
-func (src *statsReportCollector) Collect(ID string, stats Stats) {
+func (src *statsReportCollector) Collect(id string, stats Stats) {
 	src.mux.Lock()
 	defer src.mux.Unlock()
 
-	src.report[ID] = stats
+	src.report[id] = stats
 	src.collectingGroup.Done()
 }
 

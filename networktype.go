@@ -84,8 +84,8 @@ func newNetworkType(raw string) (NetworkType, error) {
 	}
 }
 
-func getNetworkType(ICENetworkType ice.NetworkType) (NetworkType, error) {
-	switch ICENetworkType {
+func getNetworkType(iceNetworkType ice.NetworkType) (NetworkType, error) {
+	switch iceNetworkType {
 	case ice.NetworkTypeUDP4:
 		return NetworkTypeUDP4, nil
 	case ice.NetworkTypeUDP6:
@@ -95,6 +95,6 @@ func getNetworkType(ICENetworkType ice.NetworkType) (NetworkType, error) {
 	case ice.NetworkTypeTCP6:
 		return NetworkTypeTCP6, nil
 	default:
-		return NetworkType(Unknown), fmt.Errorf("unknown network type: %s", ICENetworkType.String())
+		return NetworkType(Unknown), fmt.Errorf("unknown network type: %s", iceNetworkType.String())
 	}
 }

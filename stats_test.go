@@ -82,23 +82,23 @@ func waitWithTimeout(t *testing.T, wg *sync.WaitGroup) {
 	}
 }
 
-func getConnectionStats(t *testing.T, report StatsReport, ID string) PeerConnectionStats {
-	assert.Contains(t, report, ID)
-	stats, ok := report[ID].(PeerConnectionStats)
+func getConnectionStats(t *testing.T, report StatsReport, id string) PeerConnectionStats {
+	assert.Contains(t, report, id)
+	stats, ok := report[id].(PeerConnectionStats)
 	assert.True(t, ok)
 	assert.Equal(t, stats.Type, StatsTypePeerConnection)
 	return stats
 }
 
-func getDataChannelStats(t *testing.T, report StatsReport, ID string) DataChannelStats {
-	assert.Contains(t, report, ID)
-	stats, ok := report[ID].(DataChannelStats)
+func getDataChannelStats(t *testing.T, report StatsReport, id string) DataChannelStats {
+	assert.Contains(t, report, id)
+	stats, ok := report[id].(DataChannelStats)
 	assert.True(t, ok)
 	assert.Equal(t, stats.Type, StatsTypeDataChannel)
 	return stats
 }
 
-func findLocalCandidateStats(t *testing.T, report StatsReport) []ICECandidateStats {
+func findLocalCandidateStats(report StatsReport) []ICECandidateStats {
 	result := []ICECandidateStats{}
 	for _, s := range report {
 		stats, ok := s.(ICECandidateStats)
@@ -109,7 +109,7 @@ func findLocalCandidateStats(t *testing.T, report StatsReport) []ICECandidateSta
 	return result
 }
 
-func findRemoteCandidateStats(t *testing.T, report StatsReport) []ICECandidateStats {
+func findRemoteCandidateStats(report StatsReport) []ICECandidateStats {
 	result := []ICECandidateStats{}
 	for _, s := range report {
 		stats, ok := s.(ICECandidateStats)
@@ -216,8 +216,8 @@ func TestPeerConnection_GetStats(t *testing.T) {
 	assert.Equal(t, uint32(0), connStatsOffer.DataChannelsAccepted)
 	dcStatsOffer := getDataChannelStats(t, reportPCOffer, offerDC.ObjectID())
 	assert.Equal(t, DataChannelStateOpen, dcStatsOffer.State)
-	assert.NotEmpty(t, findLocalCandidateStats(t, reportPCOffer))
-	assert.NotEmpty(t, findRemoteCandidateStats(t, reportPCOffer))
+	assert.NotEmpty(t, findLocalCandidateStats(reportPCOffer))
+	assert.NotEmpty(t, findRemoteCandidateStats(reportPCOffer))
 	assert.NotEmpty(t, findCandidatePairStats(t, reportPCOffer))
 
 	connStatsAnswer = getConnectionStats(t, reportPCAnswer, answerPC.ObjectID())
@@ -227,8 +227,8 @@ func TestPeerConnection_GetStats(t *testing.T) {
 	assert.Equal(t, uint32(1), connStatsAnswer.DataChannelsAccepted)
 	dcStatsAnswer := getDataChannelStats(t, reportPCOffer, answerDC.ObjectID())
 	assert.Equal(t, DataChannelStateOpen, dcStatsAnswer.State)
-	assert.NotEmpty(t, findLocalCandidateStats(t, reportPCAnswer))
-	assert.NotEmpty(t, findRemoteCandidateStats(t, reportPCAnswer))
+	assert.NotEmpty(t, findLocalCandidateStats(reportPCAnswer))
+	assert.NotEmpty(t, findRemoteCandidateStats(reportPCAnswer))
 	assert.NotEmpty(t, findCandidatePairStats(t, reportPCAnswer))
 
 	// Close answer DC now
