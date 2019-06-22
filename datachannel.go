@@ -534,3 +534,34 @@ func (d *DataChannel) OnBufferedAmountLow(f func()) {
 		d.dataChannel.OnBufferedAmountLow(f)
 	}
 }
+
+//ObjectID return data channel object ID
+func (d *DataChannel) ObjectID() string {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return fmt.Sprintf("DataChannel-%d", *d.id)
+}
+
+func (d *DataChannel) collectStats(collector *statsReportCollector) {
+	collector.Collecting()
+
+	objectID := d.ObjectID()
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	stats := DataChannelStats{
+		Timestamp:             statsTimestampNow(),
+		Type:                  StatsTypeDataChannel,
+		ID:                    objectID,
+		Label:                 d.label,
+		Protocol:              d.protocol,
+		DataChannelIdentifier: int32(*d.id),
+		// TransportID string `json:"transportId"`
+		State: d.readyState,
+		// MessagesSent uint32 `json:"messagesSent"`
+		// BytesSent uint64 `json:"bytesSent"`
+		// MessagesReceived uint32 `json:"messagesReceived"`
+		// BytesReceived uint64 `json:"bytesReceived"`
+	}
+
+	collector.Collect(stats.ID, stats)
+}
